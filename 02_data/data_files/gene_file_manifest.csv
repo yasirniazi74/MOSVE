@@ -1,0 +1,13 @@
+File,Rows,Definition,Source
+verified_gene_labels.csv,4420,"All 4,420 genes with final label and approved-source membership indicators.","Current MOSVE bundled class files; exact 4,420-gene release."
+verified_gene_labels.txt,4420,Tab-separated Gene and Label list for all final verified-label cohort genes.,Current MOSVE bundled class files.
+verified_positive_genes.txt,1689,One symbol per line; all positive genes in the final release.,Current MOSVE positive gene file.
+verified_positive_genes_CGC.txt,756,Final positive genes with CGC membership.,CGC indicator in final verified-label release.
+verified_positive_genes_OncoKB.txt,372,Final positive genes with OncoKB membership.,OncoKB indicator in final verified-label release.
+verified_positive_genes_OnGene.txt,697,Final positive genes with OnGene membership.,OnGene indicator in final verified-label release.
+verified_positive_genes_NCG.txt,1202,Final positive genes with NCG membership.,NCG indicator in final verified-label release.
+all_gene_labels_combined.csv,5455,"Original source ledger; contains source-level candidate labels and is not the final 4,420-gene release by itself.",02_data/label_sources/all_gene_labels_combined.csv from the source workspace.
+predicted_driver_genes_score_ge_0.725.csv,1165,"Existing MOSVE OOF predictions with Novel_Driver_Score >= 0.725, including overlap flags.",Existing research result overlap_cgc_npg_ncg/all_predicted_drivers_score_ge_0_725_overlap_annotated.csv.
+candidate_genes_precision90.csv,116,Existing label-0 precision-90 novel candidate set; scores preserved.,Existing results_novel_driver_candidates/novel_driver_candidates_precision90.csv.
+final_strict_novel_candidates.csv,5,Final five candidates after broad novelty verification.,Existing FINAL_5_STRICT_NOVEL_CANDIDATES_CLEAN.csv.
+resource_overlap_genes.csv,1886,Per-gene source-hit rows from predicted-driver CGC/NPG/NCG annotations and precision-90 candidate overlap tables; source flags are literal and do not assert functional validation.,Existing annotated result tables in the research workspace.

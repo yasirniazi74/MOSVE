@@ -107,6 +107,29 @@ class ReleaseMetadataTests(unittest.TestCase):
                 comparisons = {row["Comparison"]: row for row in csv.DictReader(handle)}
             self.assertEqual(comparisons["TCGA_vs_CCRCC"]["Overlap_Genes"], "1")
 
+    def test_gene_file_exports_have_documented_counts_and_provenance(self) -> None:
+        data_dir = ROOT / "02_data/data_files"
+        files = read_csv("02_data/data_files/gene_file_manifest.csv")
+        manifest = {row["File"]: row for row in files}
+        self.assertEqual(int(manifest["verified_gene_labels.csv"]["Rows"]), 4420)
+        self.assertEqual(int(manifest["predicted_driver_genes_score_ge_0.725.csv"]["Rows"]), 1165)
+        self.assertEqual(int(manifest["candidate_genes_precision90.csv"]["Rows"]), 116)
+        self.assertEqual(int(manifest["final_strict_novel_candidates.csv"]["Rows"]), 5)
+        self.assertIn("5,418-gene", (ROOT / "README.md").read_text(encoding="utf-8"))
+
+        with (data_dir / "predicted_driver_genes_score_ge_0.725.csv").open(
+            encoding="utf-8", newline=""
+        ) as handle:
+            predictions = list(csv.DictReader(handle))
+        self.assertTrue(all(float(row["MOSVE_Score"]) >= 0.725 for row in predictions))
+
+        with (data_dir / "resource_overlap_genes.csv").open(
+            encoding="utf-8", newline=""
+        ) as handle:
+            overlaps = list(csv.DictReader(handle))
+        self.assertTrue(overlaps)
+        self.assertTrue(all(row["Source_Flag"] for row in overlaps))
+
 
 if __name__ == "__main__":
     unittest.main()

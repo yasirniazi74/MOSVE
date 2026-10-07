@@ -1,0 +1,6 @@
+Gene,Novel_Driver_Score,Final_Status,Database_Validation_Summary
+DLG4,0.8885,Strict novel candidate,No confirmed hit in CGC/NCG/NPG/GRAFT/IntOGen driver/OncoPlex driver evidence; IntOGen unfiltered marks no-driver; OncoPlex mutation matrix presence only
+SCN4B,0.8606,Strict novel candidate,No confirmed hit in CGC/NCG/NPG/GRAFT/IntOGen driver/OncoPlex driver evidence; OncoPlex mutation matrix presence only
+CYP2U1,0.7689,Strict novel candidate,No confirmed hit in CGC/NCG/NPG/GRAFT/IntOGen driver/OncoPlex driver evidence; OncoPlex mutation matrix presence only
+BID,0.7684,Strict novel candidate,No confirmed hit in CGC/NCG/NPG/GRAFT/IntOGen driver/OncoPlex driver evidence; OncoPlex mutation matrix presence only
+ARHGEF7,0.7418,Strict novel candidate,No confirmed hit in CGC/NCG/NPG/GRAFT/IntOGen driver/OncoPlex driver evidence; IntOGen unfiltered marks no-driver; OncoPlex mutation matrix presence only

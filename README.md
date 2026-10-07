@@ -29,6 +29,22 @@ label provenance and the fixed development/holdout assignment.
 - `05_external_validation/cptac_validation.py`: CPTAC validation tasks.
 - `02_data/data_files/positive_genes.csv` and `negative_genes.csv`: the 4,420
   released genes, split by class, with evidence-source indicators.
+- `02_data/data_files/verified_gene_labels.csv` and
+  `verified_gene_labels.txt`: all 4,420 final labels in CSV and tab-separated
+  text form. `verified_positive_genes.txt` lists all positive symbols; the
+  `verified_positive_genes_<SOURCE>.txt` files list positive genes supported
+  by each approved source. Source lists can overlap.
+- `02_data/data_files/all_gene_labels_combined.csv`: original 5,455-row
+  gene-level source ledger. It is provenance, not the final curated label set.
+- `02_data/data_files/predicted_driver_genes_score_ge_0.725.csv`: existing
+  out-of-fold driver predictions at the documented 0.725 cutoff.
+- `02_data/data_files/candidate_genes_precision90.csv` and
+  `final_strict_novel_candidates.csv`: the prior precision-90 candidate set
+  and the five candidates remaining after external novelty checks.
+- `02_data/data_files/resource_overlap_genes.csv`: per-gene hits in the
+  recorded driver-resource overlap checks. Each row preserves its source flag.
+- `02_data/data_files/gene_file_manifest.csv`: counts, scope, and provenance
+  for the released gene files.
 - `02_data/manifests/split_membership.csv`: fixed gene-level train/holdout
   allocation (no feature values).
 - `02_data/manifests/input_manifest.csv`: required external inputs, expected
@@ -51,6 +67,15 @@ The two class files contain 4,420 unique symbols, split by filename:
 
 - `positive_genes.csv`: 1,689 positive genes
 - `negative_genes.csv`: 2,731 reference-negative genes
+
+The predictions and candidate files are exported from the existing research
+results, rather than recalculated by the consolidated scripts. Their source
+run used a 5,418-gene cohort and the predicted-driver file uses a 0.725
+threshold; these historical scores are not a new evaluation of the released
+4,420-gene cohort. See `gene_file_manifest.csv` for source files and row counts.
+The original source ledger has 5,455 rows and includes source-level labels that
+did not necessarily survive the final release policy. Use
+`verified_gene_labels.csv` as the authoritative 4,420-gene label release.
 
 Positive genes require direct support from at least one of CGC, OncoKB,
 OnGene, or NCG. The strict cohort construction relabels 194 documented
@@ -94,11 +119,10 @@ $env:NCBI_EMAIL = "you@example.org"
    paths. Some sources (including COSMIC/OncoKB and some CPTAC data) may require
    registration or acceptance of provider terms. The download manifest records
    provider portals, not redistribution permission.
-2. Obtain the upstream `enhanced_sequence_dataset_multisource.csv` input and
-   `all_gene_labels_combined.csv` source ledger from the project/source archive.
-   They are not bundled; no public download location for these project-specific
-   files was established for this release. Place the label ledger in
-   `02_data/data_files/`.
+2. Obtain the upstream `enhanced_sequence_dataset_multisource.csv` input from
+   the project/source archive. It is not bundled; no public download location
+   for this project-specific feature input was established. The original
+   gene-level label source ledger is included in `02_data/data_files/`.
 3. Run the feature extraction stages in order with the working directory set
    to `02_data/final_model_inputs`:
 
