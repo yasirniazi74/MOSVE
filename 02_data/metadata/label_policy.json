@@ -1,0 +1,33 @@
+{
+  "cohort": "strict_verified_4420",
+  "identifier": "HGNC-style gene symbol as stored in the source experiment",
+  "label_column": "Label",
+  "positive_value": 1,
+  "negative_value": 0,
+  "counts": {
+    "genes": 4420,
+    "positive": 1689,
+    "negative": 2731
+  },
+  "positive_evidence_sources": [
+    "CGC",
+    "OncoKB",
+    "OnGene",
+    "NCG"
+  ],
+  "cohort_construction": {
+    "negative_conflicts_relabelled_positive": 194,
+    "CancerMine_dependent_positives_excluded": 596,
+    "positives_without_approved_direct_evidence_excluded": 143,
+    "negatives_with_approved_driver_evidence_excluded": 259
+  },
+  "split": {
+    "method": "stratified gene-level reserved holdout",
+    "seed": 42,
+    "holdout_fraction": 0.2,
+    "development_genes": 3536,
+    "reserved_holdout_genes": 884,
+    "source_file": "02_data/manifests/split_membership.csv"
+  },
+  "caution": "The 2,731 negatives are curated reference negatives under the stated label policy; they are not claims that the genes are biologically proven non-drivers."
+}

@@ -1,0 +1,8 @@
+stage,script,task,required_input,primary_output,notes
+feature_extraction,01_code/feature_extraction.py,all,Upstream multisource matrix and TCGA/label/database source files,02_data/final_model_inputs/,Run from 02_data/final_model_inputs; sequence then graph then engineered features
+model,01_code/model_and_candidates.py,train,Engineered matrix and source label ledger plus approved gene resources,04_strict_verified_4420_experiment/,Reconstructed genes and labels are checked against the bundled 4,420-gene release
+candidate_discovery,01_code/model_and_candidates.py,candidates,Strict experiment outputs plus independent resources,04_strict_verified_4420_experiment/resource_filtered_candidate_validation/,Out-of-fold candidate ranking
+PCAWG_validation,05_external_validation/pcawg_validation.py,build,PCAWG sample sheet and mutation/CNV/expression inputs,05_external_validation/04_features/,External feature table; no raw data bundled
+PCAWG_validation,05_external_validation/pcawg_validation.py,methylation,ICGC PACA-AU methylation and 450K annotation,05_external_validation/04_features/,External methylation features
+PCAWG_validation,05_external_validation/pcawg_validation.py,external_split|expand|cv10,Previously generated PCAWG feature/label inputs,05_external_validation/21_pcawg_external_only_gene_split/,Distinct PCAWG evaluation protocols; invoke separately
+CPTAC_validation,05_external_validation/cptac_validation.py,download|build|unseen_gene|cv10,CPTAC cohort downloads plus gene/feature annotations,05_external_validation/,Invoke one task at a time; inputs and outputs listed in input_manifest.csv
