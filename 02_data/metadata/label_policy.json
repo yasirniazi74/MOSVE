@@ -4,6 +4,8 @@
   "label_column": "Label",
   "positive_value": 1,
   "negative_value": 0,
+  "positive_gene_file": "02_data/data_files/positive_genes.csv",
+  "negative_gene_file": "02_data/data_files/negative_genes.csv",
   "counts": {
     "genes": 4420,
     "positive": 1689,

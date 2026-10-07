@@ -22,7 +22,7 @@ def _run_sequences(forwarded_args):
         warnings.filterwarnings('ignore')
         REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         RAW_SOURCE_DIR = os.path.join(REPO_ROOT, '02_data', 'raw_sources')
-        LABEL_SOURCE_DIR = os.path.join(REPO_ROOT, '02_data', 'label_sources')
+        LABEL_SOURCE_DIR = os.path.join(REPO_ROOT, '02_data', 'data_files')
         EMAIL = os.environ.get('NCBI_EMAIL', '')
         SLEEP_SEC = 0.35
         NCBI_RETMAX = 8

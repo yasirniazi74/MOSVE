@@ -18,14 +18,17 @@ label provenance and the fixed development/holdout assignment.
 
 - `01_code/feature_extraction.py`: sequence/omics, STRING graph, and engineered
   feature stages.
-- `01_code/model_and_candidates.py`: strict-label model and candidate-ranking
-  tasks.
+- `01_code/model_and_candidates.py`: strict-label model training.
+- `01_code/novel_candidate_score.py`: resource-filtered novel candidate scores.
+- `01_code/gene_prediction_overlap.py`: shared predictions across TCGA, CCRCC,
+  HNSCC, and PCAWG.
 - `05_external_validation/pcawg_validation.py`: PCAWG feature-building and
   validation tasks.
-- `05_external_validation/cptac_validation.py`: CPTAC download, feature, and
-  validation tasks.
-- `02_data/labels/gene_labels.csv`: 4,420 genes and binary labels with direct
-  evidence-source indicators.
+- `05_external_validation/cptac_data.py`: CPTAC input download and feature
+  preparation.
+- `05_external_validation/cptac_validation.py`: CPTAC validation tasks.
+- `02_data/data_files/positive_genes.csv` and `negative_genes.csv`: the 4,420
+  released genes, split by class, with evidence-source indicators.
 - `02_data/manifests/split_membership.csv`: fixed gene-level train/holdout
   allocation (no feature values).
 - `02_data/manifests/input_manifest.csv`: required external inputs, expected
@@ -37,20 +40,19 @@ Generated outputs and downloaded data are ignored by Git. Do not add feature
 matrices, cohort-level raw files, or other derived feature tables to a public
 commit.
 
-The four stage scripts group related operations behind named commands, so the
-analyses remain separate and runnable without maintaining one source file per
-operation. Raw-input and generated-output folders are created when needed.
-The `.gitkeep` files in the empty `02_data` input destinations preserve
-download locations without adding data.
+The workflow scripts group related operations behind named commands. PCAWG
+and CPTAC raw data are not bundled; dataset-specific sources and expected
+locations are listed in `02_data/manifests/input_manifest.csv`. Raw-input and
+generated-output folders are created when needed.
 
 ## Label release
 
-`gene_labels.csv` has 4,420 unique symbols:
+The two class files contain 4,420 unique symbols, split by filename:
 
-- 1,689 positives (`Label=1`)
-- 2,731 negatives (`Label=0`)
+- `positive_genes.csv`: 1,689 positive genes
+- `negative_genes.csv`: 2,731 reference-negative genes
 
-Positive labels require direct support from at least one of CGC, OncoKB,
+Positive genes require direct support from at least one of CGC, OncoKB,
 OnGene, or NCG. The strict cohort construction relabels 194 documented
 negative conflicts with direct evidence, excludes 596 CancerMine-dependent
 positives and 143 unsupported positives, and removes 259 negatives found in
@@ -95,7 +97,8 @@ $env:NCBI_EMAIL = "you@example.org"
 2. Obtain the upstream `enhanced_sequence_dataset_multisource.csv` input and
    `all_gene_labels_combined.csv` source ledger from the project/source archive.
    They are not bundled; no public download location for these project-specific
-   files was established for this release.
+   files was established for this release. Place the label ledger in
+   `02_data/data_files/`.
 3. Run the feature extraction stages in order with the working directory set
    to `02_data/final_model_inputs`:
 
@@ -116,26 +119,42 @@ $env:NCBI_EMAIL = "you@example.org"
 
    It creates `04_strict_verified_4420_experiment/` locally. The script checks
    the expected 4,420/1,689/2,731 cohort counts and compares every gene and
-   label against `02_data/labels/gene_labels.csv`. It stops if the reconstructed
-   cohort differs, then writes feature-bearing experiment artifacts locally;
-   keep those generated files out of Git.
+   label against the combined positive and negative gene files in
+   `02_data/data_files/`. It stops if the reconstructed cohort differs, then
+   writes feature-bearing experiment artifacts locally; keep those generated
+   files out of Git.
 5. Run resource-filtered candidate discovery:
 
    ```powershell
-   python .\01_code\model_and_candidates.py candidates
+   python .\01_code\novel_candidate_score.py
    ```
 
    This stage requires the strict experiment outputs plus CIViC, IntOGen/OncoPlex,
    and PCAWG reference files listed in the input manifest. Its outputs contain
    scores and feature values and are intentionally not part of the release.
-6. For PCAWG analyses, list tasks with
-   `python .\05_external_validation\pcawg_validation.py --help`. For CPTAC,
-   list tasks with `python .\05_external_validation\cptac_validation.py --help`.
+6. Compare cohort predictions after preparing four CSV/TSV files with `Gene`
+   and `Score` columns. Predictions at or above 0.50 are counted as drivers:
+
+   ```powershell
+   python .\01_code\gene_prediction_overlap.py `
+     --tcga .\predictions\tcga.csv `
+     --ccrcc .\predictions\ccrcc.csv `
+     --hnscc .\predictions\hnscc.csv `
+     --pcawg .\predictions\pcawg.csv `
+     --output-dir .\prediction_overlap
+   ```
+
+   The output contains per-gene membership and pairwise overlap summaries.
+7. For PCAWG analyses, list tasks with
+   `python .\05_external_validation\pcawg_validation.py --help`. For CPTAC
+   input download and feature preparation, use
+   `python .\05_external_validation\cptac_data.py --help`. For CPTAC
+   validation, use `python .\05_external_validation\cptac_validation.py --help`.
    Download PCAWG metadata and inventory with
    `.\05_external_validation\code\pcawg_data.ps1 -Action Inventory`, then
    download its large core inputs with
    `.\05_external_validation\code\pcawg_data.ps1 -Action CoreData`. Download
-   CPTAC files with the `download` task. Required files are listed in
+   CPTAC files with `cptac_data.py download`. Required files are listed in
    `02_data/manifests/input_manifest.csv`. External feature tables and
    validation results are not bundled.
 
@@ -145,7 +164,7 @@ $env:NCBI_EMAIL = "you@example.org"
   pipeline and use fixed input filenames. Follow the manifest and working
   directory instructions; do not assume that running a script downloads every
   required file automatically.
-- The paper's exact end-to-end run cannot be reproduced from this repository
+- The paper's exact end-to-end run cannot be rerun from this repository
   alone until the project-specific base matrix/label ledger and licensed or
   controlled-access inputs are supplied.
 - PCAWG/CPTAC validation code is included as source, but its calculations are
